@@ -1,7 +1,7 @@
-﻿using ECommerce.Validations;
+﻿using ECommerce519.APIV9.Validations;
 using System.ComponentModel.DataAnnotations;
 
-namespace ECommerce.Models
+namespace ECommerce519.APIV9.Models
 {
     public class Category
     {

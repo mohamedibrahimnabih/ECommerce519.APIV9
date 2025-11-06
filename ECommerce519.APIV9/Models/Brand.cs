@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace ECommerce.Models
+namespace ECommerce519.APIV9.Models
 {
     public class Brand
     {

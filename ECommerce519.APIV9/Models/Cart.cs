@@ -1,4 +1,4 @@
-﻿namespace ECommerce.Models
+﻿namespace ECommerce519.APIV9.Models
 {
     public class Cart
     {

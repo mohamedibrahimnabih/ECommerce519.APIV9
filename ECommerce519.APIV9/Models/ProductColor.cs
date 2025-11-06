@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace ECommerce.Models
+namespace ECommerce519.APIV9.Models
 {
     //[PrimaryKey(nameof(ProductId), nameof(Color))]
     public class ProductColor
