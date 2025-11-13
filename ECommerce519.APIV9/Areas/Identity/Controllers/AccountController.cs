@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace ECommerce519.APIV9.Areas.Identity
+namespace ECommerce519.APIV9.Areas.Identity.Controllers
 {
     [Route("[Area]/[controller]")]
     [ApiController]
@@ -16,9 +16,9 @@ namespace ECommerce519.APIV9.Areas.Identity
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly Repository<ApplicationUserOTP> _applicationUserOTPRepository;
+        private readonly IRepository<ApplicationUserOTP> _applicationUserOTPRepository;
 
-        public AccountController(UserManager<ApplicationUser> userManager, IEmailSender emailSender, SignInManager<ApplicationUser> signInManager, Repository<ApplicationUserOTP> applicationUserOTPRepository)
+        public AccountController(UserManager<ApplicationUser> userManager, IEmailSender emailSender, SignInManager<ApplicationUser> signInManager, IRepository<ApplicationUserOTP> applicationUserOTPRepository)
         {
             _userManager = userManager;
             _emailSender = emailSender;

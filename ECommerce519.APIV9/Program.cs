@@ -70,6 +70,8 @@ namespace ECommerce519.APIV9
             var service = scope.ServiceProvider.GetService<IDBInitializer>();
             service!.Initialize();
 
+            app.UseStaticFiles();
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

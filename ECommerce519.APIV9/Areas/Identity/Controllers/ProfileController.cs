@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ECommerce519.APIV9.Areas.Identity
+namespace ECommerce519.APIV9.Areas.Identity.Controllers
 {
     [Route("[area]/[controller]")]
     [ApiController]

@@ -22,4 +22,9 @@
 		</PackageReference>
 	</ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\product_images\" />
+    <Folder Include="wwwroot\brand_images\" />
+  </ItemGroup>
+
 </Project>
