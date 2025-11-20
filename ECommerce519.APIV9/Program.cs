@@ -1,11 +1,18 @@
 using ECommerce519.APIV9.Configurations;
+using ECommerce519.APIV9.Services;
 using ECommerce519.APIV9.Utitlies;
 using ECommerce519.APIV9.Utitlies.DBInitilizer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Stripe;
+using System.Globalization;
+using System.Text;
 
 namespace ECommerce519.APIV9
 {
@@ -60,9 +67,50 @@ namespace ECommerce519.APIV9
             builder.Services.AddScoped<IRepository<Cart>, Repository<Cart>>();
             builder.Services.AddScoped<IRepository<Promotion>, Repository<Promotion>>();
 
+
             builder.Services.RegisterMapsterConfig();
             builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
             StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+
+            builder.Services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(confi =>
+                {
+                    confi.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = true,
+                        ValidateIssuer = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = "https://localhost:7049",
+                        ValidAudience = "https://localhost:7049,https://localhost:4200",
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("4BB86D85AE74ABD1D96DB199A2D894BB86D85AE74ABD1D96DB199A2D89"))
+                    };
+                });
+
+            builder.Services.AddTransient<ITokenService, Services.TokenService>();
+
+            builder.Services.AddAuthorization();
+
+            builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            const string defaultCulture = "en";
+
+            var supportedCultures = new[]
+            {
+                new CultureInfo(defaultCulture),
+                new CultureInfo("ar"),
+                new CultureInfo("es")
+            };
+
+            builder.Services.Configure<RequestLocalizationOptions>(options => {
+                options.DefaultRequestCulture = new RequestCulture(defaultCulture);
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
 
             var app = builder.Build();
 
@@ -81,8 +129,10 @@ namespace ECommerce519.APIV9
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
             app.MapControllers();
 

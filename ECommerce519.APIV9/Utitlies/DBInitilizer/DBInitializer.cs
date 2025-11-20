@@ -26,7 +26,7 @@ namespace ECommerce519.APIV9.Utitlies.DBInitilizer
                 if (_context.Database.GetPendingMigrations().Any())
                     _context.Database.Migrate();
 
-                if(_roleManager.Roles.IsNullOrEmpty())
+                if(_roleManager.Roles is null)
                 {
                     _roleManager.CreateAsync(new(SD.SUPER_ADMIN_ROLE)).GetAwaiter().GetResult();
                     _roleManager.CreateAsync(new(SD.ADMIN_ROLE)).GetAwaiter().GetResult();

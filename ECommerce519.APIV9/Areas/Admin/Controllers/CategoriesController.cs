@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace ECommerce519.APIV9.Areas.Admin.Controllers
 {
@@ -10,10 +11,13 @@ namespace ECommerce519.APIV9.Areas.Admin.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly IRepository<Category> _categoryRepository;
+        private readonly IStringLocalizer<LocalizationController> _stringLocalizer;
 
-        public CategoriesController(IRepository<Category> categoryRepository)
+        public CategoriesController(IRepository<Category> categoryRepository,
+            IStringLocalizer<LocalizationController> stringLocalizer)
         {
             _categoryRepository = categoryRepository;
+            _stringLocalizer = stringLocalizer;
         }
 
         [HttpGet]
@@ -27,7 +31,7 @@ namespace ECommerce519.APIV9.Areas.Admin.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE},{SD.ADMIN_ROLE}")]
+        [Authorize]
         public async Task<IActionResult> GetOne(int id, CancellationToken cancellationToken)
         {
             var category = await _categoryRepository.GetOneAsync(e => e.Id == id, cancellationToken: cancellationToken, tracked: false);
@@ -39,7 +43,7 @@ namespace ECommerce519.APIV9.Areas.Admin.Controllers
         }
 
         [HttpPost("")]
-        [Authorize(Roles = $"{SD.SUPER_ADMIN_ROLE},{SD.ADMIN_ROLE}")]
+        [Authorize]
         public async Task<IActionResult> Create(Category category, CancellationToken cancellationToken)
         {
             await _categoryRepository.AddAsync(category, cancellationToken);
@@ -48,7 +52,7 @@ namespace ECommerce519.APIV9.Areas.Admin.Controllers
             //return View(nameof(Index));
             return CreatedAtAction(nameof(GetOne), new { id = category.Id }, new
             {
-                success_notifaction = "Create Category Successfully"
+                success_notifaction = _stringLocalizer["AddCategory"].Value
             });
         }
 
